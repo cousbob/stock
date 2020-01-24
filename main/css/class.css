@@ -1,0 +1,185 @@
+/* CSS Document */
+
+.table_main {background-color: #963;}
+.table_main td {background-color: #FFF;}
+.table_main th {background-color: #666;color: #FFF;}
+.plus {color: #090;}
+.min  {color: #F00;}
+
+.align-c{text-align: center;}
+.align-l{text-align: left;}
+.align-r{text-align: right;}
+
+.div_main_menu div {
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    background-color: #930;
+    border-left: 5px solid #930;
+    border-right: 5px solid #930;
+    border-radius: 8px;
+    box-shadow: 1px 1px 1px 0 #999;
+    font-size: 12px;
+    font-family: "微軟正黑體";
+    font-weight: bolder;
+    color: #FF6;
+}
+.triangle_do {
+    width: 0;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    border: 5px solid #00F;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+.triangle_up {
+    width: 0;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    border: 5px solid #00F;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid transparent;
+}
+/*網路上找的jquery遮罩的css*/
+
+.bg {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    opacity: 0.7;
+}
+/*原始.content{display:none;width:500px;height:300px;position:fixed;top:50%;margin-top:-150px;background:#fff;z-index:3;left:50%;margin-left:-250px;}*/
+/*.content{
+    display:none;
+    position:fixed;
+    top:20px;
+    margin-top:0;
+    background:#fff;
+    z-index:3;left:50%;
+    margin-left:-250px;
+}*/
+
+.content{
+    display:none;
+    position:fixed;
+    width: 100%;
+    top: 0;
+    z-index:3;
+}
+.content img{
+    display: block;
+    margin: auto;
+    z-index: 4;
+}
+/*calendar行事曆*/
+
+.div_cal_date img,
+.div_cal_date input,
+.div_cal_date select {
+    vertical-align: middle;
+}
+/*.table_calendar .lb-text{ display:inline-block; } 沒有用到,網路上抓下來的*/
+
+.table_calendar td {
+    width: 132px;
+    height: 120px;
+    vertical-align: text-top;
+    text-align: left;
+    overflow-y: auto;
+}
+.table_calendar td.previous, .table_calendar td.next {
+    background-color: #F6F6F6;
+    color: #C6C6C6;
+}
+.table_calendar td.active {
+    background-color: #b1cbe1;
+    color: #2b5070;
+    border: 2px solid #4682b4;
+}
+.table_calendar td.active ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 1em;
+    padding-right: 0.6em;
+}
+.table_calendar td.active li {
+    margin-bottom: 0;
+}
+.table_calendar td.active li input {
+    vertical-align: middle;
+}
+.table_calendar td.active li-text {
+    display: inline-block;
+}
+/*girls 正妹圖片*/
+
+.div_girls_pic {
+    display: inline-block;
+    float: left;
+    width: 300px;
+    border: 1px solid #999;
+}
+.div_girls_pic a {
+    color: #666;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 13px;
+}
+.div_girls_pic img {
+    width: 280px;
+    height: 430px;
+    border: 10px solid #333;
+}
+.div_more {
+    display:none;
+    clear: both;
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    font-weight: 700;
+    color: #999;
+    cursor: pointer;
+}
+.div_BKTop {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    bottom: 100px;
+    right: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #999;
+    text-align: center;
+    line-height: 30px;
+    border: 2px dashed #CCC;
+    cursor: pointer;
+}
+
+.machi_code_tit{font-weight: bold;font-size: 16px;}
+.inp_wallet_hid{display: none;width:95%;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

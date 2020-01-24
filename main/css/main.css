@@ -1,0 +1,84 @@
+/* CSS Document */
+body{
+  font-size:12px;	
+  margin:0;
+  padding:0;
+}
+a,a:link,a:visited,a:active{
+  color:#000;
+  text-decoration:none;
+  cursor:pointer;
+}
+textarea{
+  font-family:"微軟正黑體";	
+}
+#div_page_mark{
+	position:absolute;
+	font-size:48px;
+	font-style:italic;
+	left:30px;
+	top:10px;
+}
+
+#div_top{
+  height:100px;	
+  width:100%;
+}
+  #div_top_menu{
+  	margin-left:250px;
+	margin-top:20px;
+  	display:inline-block;
+  }
+  #div_top_menu div{
+    display:inline-block;
+    width:80px;
+	height:30px;
+	line-height:30px;
+	border:1px solid #000;
+	text-align:center;
+	background-color:#F90;
+	font-size:16px;
+	font-family:"微軟正黑體";
+	font-weight:bolder;
+  }
+#div_top_marquee{
+  position:absolute;
+  overflow:hidden;	
+  top:15px;
+  margin-left:200px;
+}
+  #div_top_marquee a,#div_top_marquee a:active,#div_top_marquee a:visited,#div_top_marquee a:link,#div_top_marquee a:hover{
+    font-size:14px;
+    font-weight:bold;	
+    color:#696;
+      line-height: 12px;
+  }
+
+
+#div_content{
+  width:1000px;	
+  /*min-height:600px;*/
+  margin:0 auto;
+  margin-bottom: 20px;
+}
+  #div_left{
+	width:0px;
+	border:0px solid #000;
+	min-height:600px;
+	display:inline;	
+  }
+  #div_main{
+	width:850px;
+	display:inline;	
+  }
+  
+#code_div_header, #machi_div_header{
+    width: 400px;
+    margin: 0 auto;
+    display:block;
+}	
+	
+	
+
+
+

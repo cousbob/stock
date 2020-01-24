@@ -1,0 +1,9 @@
+# 檔案名稱 .gitignore
+/資料存放
+/.metadata
+.git
+stock.sublime-workspace
+*/.buildpath
+*/.project
+/*/.settings/
+data/
