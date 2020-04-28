@@ -3,6 +3,7 @@
 if (!function_exists('nextday')){
     require_once dirname(dirname(__file__)).'./stock.inc.php';
 }
+require_once dirname(__FILE__).'./MorInfo.php';
 class cGetStockInfo {
     private $nPreDayPer   = 0.8;        //要往前的天數要計算的百分比
     private $nBuyPercent  = 0.15;       //當這檔股票, 買進超過當天總買進股票的百分比, 預設為15%
@@ -108,11 +109,9 @@ class cGetStockInfo {
     public function __construct(){
         $this->sRootPath = dirname(dirname(__file__)).'/';
         $this->sDataPath = $this->sRootPath.'./../data/';
-        // 載入共用的外資資訊
-        include($this->sRootPath.'./machi/get_mor_info.inc.php');
-        $this->aCom      = $arr_com;
-        $this->aComLong  = $arr_com_long;
-        $this->aComShort = $arr_com_short;
+        $this->aCom      = MorInfo::getMorInfo();
+        $this->aComLong  = MorInfo::getComLong();
+        $this->aComShort = MorInfo::getComShort();
         $this->sYY       = date('Y');
         $this->sMM       = date('m');
         $this->sDD       = date('d');
@@ -550,7 +549,7 @@ class cGetStockInfo {
         $_total_first_long_str  = '';
         $_total_first_short_num = 0;
         $_total_first_short_str = '';
-        
+
         //依照每個外資抓出來
         foreach ($arr_com as $com_name=>$_data1){
             if (!is_array($com_info[$sno][$com_name])) continue;

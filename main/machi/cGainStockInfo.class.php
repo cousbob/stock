@@ -3,6 +3,7 @@
 if (!function_exists('nextday')){
     require_once dirname(dirname(__file__)).'./stock.inc.php';
 }
+require_once dirname(__FILE__).'./MorInfo.php';
 class cGainStockInfo {
     private $sRootPath = '';//主目錄路徑
     private $sDataPath = '';//資料目錄路徑
@@ -32,11 +33,9 @@ class cGainStockInfo {
     public function __construct(){
         $this->sRootPath = dirname(dirname(__file__)).'/';
         $this->sDataPath = $this->sRootPath.'../data';
-        // 載入共用的外資資訊
-        include($this->sRootPath.'./machi/get_mor_info.inc.php');
-        $this->aCom      = $arr_com;
-        $this->aComLong  = $arr_com_long;
-        $this->aComShort = $arr_com_short;
+        $this->aCom      = MorInfo::getMorInfo();
+        $this->aComLong  = MorInfo::getComLong();
+        $this->aComShort = MorInfo::getComShort();
         $this->sYY       = date('Y');
         $this->sMM       = date('m');
         $this->sDD       = date('d');
@@ -1089,9 +1088,9 @@ class cGainStockInfo {
                 $type_date[$_type] = $_date;
             }
         }
-        if (''!=$type_date['mTwIndex']){
-            $_file_path = $data_path.'./stock/tw_index/txt_'.$type_date['mTwIndex'].'.txt';
-            if (!file_exists($_file_path)) continue;
+
+        $_file_path = $data_path.'./stock/tw_index/txt_'.$type_date['mTwIndex'].'.txt';
+        if (''!=$type_date['mTwIndex'] && file_exists($_file_path)){
             $_handle    = fopen($_file_path, "r");
             $_contents  = fread($_handle,filesize($_file_path));
             $_arr       = explode('@',$_contents);

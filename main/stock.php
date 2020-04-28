@@ -249,6 +249,8 @@ $html .= '<a href="./trans_stock.php" target="_blank">買賣紀錄</a>&nbsp;&nbs
 $html .= '<a href="./cal_stock.php"   target="_blank">股票演算</a>&nbsp;&nbsp;';
 $html .= '<a href="https://www.google.com/search?q=台股指數&oq=台股指數" target="_blank">台股</a>&nbsp;&nbsp;';
 $html .= '<a href="https://tw.stock.yahoo.com/us/" target="_blank">美股</a>&nbsp;&nbsp;';
+$html .= '<a href="https://histock.tw/stock/dividend.aspx" target="_blank">股利發放</a>&nbsp;&nbsp;';
+
 $html .= '</td>';
 $html .= '</tr>';
 $html .= '</table>';
