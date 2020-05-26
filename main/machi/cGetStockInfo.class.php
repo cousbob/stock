@@ -1,7 +1,7 @@
 <?php 
 // 載入需要的函式
 if (!function_exists('nextday')){
-    require_once dirname(dirname(__file__)).'./stock.inc.php';
+    require_once dirname(dirname(__FILE__)).'./stock.inc.php';
 }
 require_once dirname(__FILE__).'./MorInfo.php';
 class cGetStockInfo {
@@ -68,6 +68,12 @@ class cGetStockInfo {
                             ,15 => '10000~19999'
                             ,16 => '20000~'
     );
+    //存股股票
+    private $aSaveStock = array(
+         2886 => '兆豐金'
+        ,2892 => '第一金'
+        ,2412 => '中華電'
+    );
     //所有買賣量的級距
     private $aBosType  = array('buy','sel','bms');
     //已經運算過的日期
@@ -107,7 +113,7 @@ class cGetStockInfo {
     private $aNoShowSno = array('1101B','2801','2812','2834','2836','2838','2880','2881','2881A','2881B','2882','2882A','2882B','2883','2838A','2884','2885','2886','2887','2887E','2887F','2888','2889','2890','2891','2891B','2891C','2892','5876','5880');
     
     public function __construct(){
-        $this->sRootPath = dirname(dirname(__file__)).'/';
+        $this->sRootPath = dirname(dirname(__FILE__)).'/';
         $this->sDataPath = $this->sRootPath.'./../data/';
         $this->aCom      = MorInfo::getMorInfo();
         $this->aComLong  = MorInfo::getComLong();
@@ -215,6 +221,9 @@ class cGetStockInfo {
     }
     public function mGetLvType(){
         return $this->aLvType;
+    }
+    public function mGetSaveStock(){
+        return $this->aSaveStock;
     }
     
     /**
@@ -769,14 +778,14 @@ class cGetStockInfo {
             foreach ($_datas as $_sno){
                 $_per_str = $this->mGetOutPercentStr($_sno);
                 if (in_array($_sno,$no_show_sno) || $_per_str == '沒有外資持股量') continue;
-                $_z       = $nsp_data[$_sno]['z'];
-                $_uod_str = cal_num_color($nsp_data[$_sno]['uod']);
-                $cmoney_a = '<a href="https://www.cmoney.tw/finance/f00029.aspx?s='.$_sno.'" target="_blank">CMoney</a>&nbsp;';
-                $google_a = '<a href="https://www.google.com/search?q='.$_sno.'&oq='.$_sno.'" target="_blank">google</a>&nbsp;';
-                $usa_a    = '<a href="https://tw.stock.yahoo.com/us/" target="_blank">USA</a>&nbsp;';
+                $_z         = $nsp_data[$_sno]['z'];
+                $_uod_str   = cal_num_color($nsp_data[$_sno]['uod']);
+                $cmoney_a   = '<a href="https://www.cmoney.tw/finance/f00029.aspx?s='.$_sno.'" target="_blank">CMoney</a>&nbsp;';
+                $google_a   = '<a href="https://www.google.com/search?q='.$_sno.'&oq='.$_sno.'" target="_blank">Google</a>&nbsp;';
+                $goodinfo_a = '<a href="https://goodinfo.tw/StockInfo/StockDetail.asp?STOCK_ID='.$_sno.'" target="_blank">Goodinfo</a>&nbsp;';
                 $rtn .= '<tr>';
                 $rtn .= '<td width="200">'.$_sno.'-'.$all_stock[$_sno]['name'].'('.$_z.','.$_uod_str.')'.'<br/ >';
-                $rtn .= $cmoney_a.$google_a.$usa_a.'<br />';
+                $rtn .= $google_a.'<br />'.$cmoney_a.'<br />'.$goodinfo_a.'<br />';
                 $rtn .= $this->mUpDownStock($_sno).'</td>';
                 $rtn .= '<td>';
                 $rtn .= $this->mGetOutAmount($_sno);
@@ -1446,6 +1455,7 @@ class cGetStockInfo {
             $_str = implode('|',$_arr);
             //抓前一日的股票資訊
             //https://mis.twse.com.tw/stock/api/getStock.jsp?ch=1565.tw&json=1&delay=0
+            //https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_2439.tw&json=1&delay=0&_=1552123547443
             //抓即時股價資訊
             $url  = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch='.$_str.'&json=1&delay=0&_='.microtime(true);
             $ch   = curl_init();

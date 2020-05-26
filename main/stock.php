@@ -101,6 +101,7 @@ $get_stock->mSetTrackData($track_data);
 $arr_stock    = $get_stock->mGetStockInfo();  //計算出外資買賣量
 $first_wkdate = $get_stock->mGetFirstWkdate();//取得第一個工作日
 $last_wkdate  = $get_stock->mGetLastWkdate(); //取得最後一個工作日
+$arr_save_stock = $get_stock->mGetSaveStock();//取得要存股的股票
 
 //下拉天數
 $sel_day_str  = '<select name="sel_sta_days" id="sel_sta_days">';
@@ -187,6 +188,20 @@ $html .= '    line-height: 30px;';
 $html .= '    border: 2px dashed #CCC;';
 $html .= '    cursor: pointer;';
 $html .= '}';
+$html .= '.div_tool {';
+$html .= '    position: fixed;';
+$html .= '    width: 30px;';
+$html .= '    height: 30px;';
+$html .= '    bottom: 70px;';
+$html .= '    right: 20px;';
+$html .= '    font-size: 14px;';
+$html .= '    font-weight: bold;';
+$html .= '    color: #999;';
+$html .= '    text-align: center;';
+$html .= '    line-height: 30px;';
+$html .= '    border: 2px dashed #CCC;';
+$html .= '    cursor: pointer;';
+$html .= '}';
 $html .= '</style>';
 $html .= '<script type="text/javascript">';
 $html .= '$(function(){
@@ -197,6 +212,9 @@ $html .= '$(function(){
                 var $body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $(\'html\') : $(\'body\')) : $(\'html,body\');
                 $body.animate({scrollTop: 0}, 600);
                 return false;
+            });
+            $(".div_tool").click(function(){
+                window.open("https://tw.stock.yahoo.com/us/");
             });
           })
           function send_key(key){
@@ -241,6 +259,20 @@ $html .= '</tr>';
 $html .= '<tr><td align="right">追蹤的股票:</td>';
 $html .= '<td colspan="3">'.$check1_inp.'</td>';
 $html .= '</tr>';
+$html .= '<tr>';
+$html .= '<td align="right">存股股票:</td>';
+$html .= '<td colspan="3">';
+foreach ($arr_save_stock as $_sno => $_name){
+    $html .= $_name.'('.$_sno.')&nbsp;&nbsp;';
+    $html .= '<a href="https://www.google.com/search?q='.$_sno.'&oq='.$_sno.'" target="_blank">Google</a>&nbsp;&nbsp;';
+    $html .= '<a href="https://goodinfo.tw/StockInfo/StockDetail.asp?STOCK_ID='.$_sno.'" target="_blank">個股市況</a>&nbsp;&nbsp;';
+    $html .= '<a href="https://goodinfo.tw/StockInfo/StockDividendSchedule.asp?STOCK_ID='.$_sno.'" target="_blank">除權息日程</a>&nbsp;&nbsp;';
+    $html .= '<a href="https://goodinfo.tw/StockInfo/StockBzPerformance.asp?STOCK_ID='.$_sno.'" target="_blank">經營績效</a>&nbsp;&nbsp;';
+    $html .= '<br />';
+}
+$html .= '※看官股持股,除息日程,ROE大於10%且ROA大於10%,EPS大於15倍,殖利率大於5%';
+$html .= '</td>';
+$html .= '</tr>';
 $html .= '<tr><td align="right">連結:</td>';
 $html .= '<td colspan="3">';
 $html .= '<a href="./sch_stock.php"   target="_blank">股票資訊查詢</a>&nbsp;&nbsp;';
@@ -249,15 +281,15 @@ $html .= '<a href="./trans_stock.php" target="_blank">買賣紀錄</a>&nbsp;&nbs
 $html .= '<a href="./cal_stock.php"   target="_blank">股票演算</a>&nbsp;&nbsp;';
 $html .= '<a href="https://www.google.com/search?q=台股指數&oq=台股指數" target="_blank">台股</a>&nbsp;&nbsp;';
 $html .= '<a href="https://tw.stock.yahoo.com/us/" target="_blank">美股</a>&nbsp;&nbsp;';
-$html .= '<a href="https://histock.tw/stock/dividend.aspx" target="_blank">股利發放</a>&nbsp;&nbsp;';
-
+$html .= '<br />';
+$html .= '<a href="https://histock.tw/stock/dividend.aspx" target="_blank">股利發放(HiStock)</a>&nbsp;&nbsp;';
+$html .= '<a href="https://goodinfo.tw/StockInfo/StockDividendScheduleList.asp?MARKET_CAT=%E5%85%A8%E9%83%A8&INDUSTRY_CAT=%E5%85%A8%E9%83%A8&YEAR=%E5%8D%B3%E5%B0%87%E9%99%A4%E6%AC%8A%E6%81%AF" target="_blank">股利發放(Goodinfo)</a>&nbsp;&nbsp;';
 $html .= '</td>';
 $html .= '</tr>';
 $html .= '</table>';
 $html .= '起始日期:'.format_date($first_wkdate,2).'~結束日期:'.format_date($last_wkdate,2).',';
 $html .= $sel_sta_days.'天內有超過'.$sel_sta_days_per.'天買入'.$sel_buy_percent.'%以上,賣出超過'.$sel_sel_percent.'%以上';
 $html .= '<br />';
-
 $all_show_type = $get_stock->mGetAllShowType();
 $arr_type      = array();
 foreach ($all_show_type as $_key){
@@ -268,6 +300,7 @@ $_str  = $get_stock->mShowStockInfo($arr_type);
 $html .= $_str;
 $html .= '</form>';
 $html .= '<div class="div_BKTop" title="回頂端">top</div>';
+$html .= '<div class="div_tool">美股</div>';
 $html .= '</body>';
 $html .= '</html>';
 print($html);
