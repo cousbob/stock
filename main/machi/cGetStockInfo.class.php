@@ -72,7 +72,12 @@ class cGetStockInfo {
     private $aSaveStock = array(
          2886 => '兆豐金'
         ,2892 => '第一金'
+        ,5880 => '合庫金'
+        ,2880 => '華南金'
         ,2412 => '中華電'
+        ,2412 => '中華電'
+        ,3045 => '台灣大'
+        ,4904 => '遠傳　'
     );
     //所有買賣量的級距
     private $aBosType  = array('buy','sel','bms');
@@ -780,12 +785,12 @@ class cGetStockInfo {
                 if (in_array($_sno,$no_show_sno) || $_per_str == '沒有外資持股量') continue;
                 $_z         = $nsp_data[$_sno]['z'];
                 $_uod_str   = cal_num_color($nsp_data[$_sno]['uod']);
-                $cmoney_a   = '<a href="https://www.cmoney.tw/finance/f00029.aspx?s='.$_sno.'" target="_blank">CMoney</a>&nbsp;';
-                $google_a   = '<a href="https://www.google.com/search?q='.$_sno.'&oq='.$_sno.'" target="_blank">Google</a>&nbsp;';
-                $goodinfo_a = '<a href="https://goodinfo.tw/StockInfo/StockDetail.asp?STOCK_ID='.$_sno.'" target="_blank">Goodinfo</a>&nbsp;';
+                $cmoney_a   = '<a href="https://www.cmoney.tw/finance/f00029.aspx?s='.$_sno.'" target="_blank">CM</a>&nbsp;';
+                $google_a   = '<a href="https://www.google.com/search?q='.$_sno.'&oq='.$_sno.'" target="_blank">G</a>&nbsp;';
+                $goodinfo_a = '<a href="https://goodinfo.tw/StockInfo/StockDetail.asp?STOCK_ID='.$_sno.'" target="_blank">GInfo</a>&nbsp;';
                 $rtn .= '<tr>';
                 $rtn .= '<td width="200">'.$_sno.'-'.$all_stock[$_sno]['name'].'('.$_z.','.$_uod_str.')'.'<br/ >';
-                $rtn .= $google_a.'<br />'.$cmoney_a.'<br />'.$goodinfo_a.'<br />';
+                $rtn .= $google_a.$cmoney_a.$goodinfo_a.'<br />';
                 $rtn .= $this->mUpDownStock($_sno).'</td>';
                 $rtn .= '<td>';
                 $rtn .= $this->mGetOutAmount($_sno);
