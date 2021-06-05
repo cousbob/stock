@@ -4,7 +4,8 @@ if (!function_exists('nextday')){
     require_once dirname(dirname(__FILE__)).'./stock.inc.php';
 }
 require_once dirname(__FILE__).'./MorInfo.php';
-class cGetStockInfo {
+class cGetStockInfo 
+{
     private $nPreDayPer   = 0.8;        //要往前的天數要計算的百分比
     private $nBuyPercent  = 0.15;       //當這檔股票, 買進超過當天總買進股票的百分比, 預設為15%
     private $nSelPercent  = 0.03;       //當這檔股票, 賣出超過當天總買進股票的百分比, 預設為3%
@@ -18,73 +19,77 @@ class cGetStockInfo {
     private $sDataPath    = '';         //資料的路徑
     private $sLastWkdate  = '';         //最後實際資料的日期(yyyymmdd)
     private $sFirstWkdate = '';         //最早實際抓資料的日期(yyyymmdd)
-    private $aCom         = array();    //外資的代號跟中文名稱陣列
-    private $aComInfo     = array();    //觀察中的外資的買賣量資料
-    private $aComLong     = array();    //長線的外資代號
-    private $aMorDays     = array(1);   //抓外資買賣量資料的天數,預設1天
-    private $aComHold     = array();    //外資可能的持股量
-    private $aDayMost     = array();    //記錄當天有大量買進的股票
-    private $aComShort    = array();    //短線的外資代號
-    private $aTopStock    = array();    //外資跟投信是否有多天買入股票
-    private $aLowStock    = array();    //外資跟投信是否有多天賣出股票
-    private $aAllStock    = array();    //所有股票的代號以及資訊
-    private $aArrWkdate   = array();    //實際有資料的日期的陣列
-    private $aKeyinData   = array();    //持有的股票陣列
-    private $aTrackData   = array();    //追蹤中的股票陣列
-    private $aOutPerData  = array();    //所有外資的持股比例
-    private $aOutTouStock = array();    //外資跟投信當天有大量買入或賣出的股票
-    private $aSchDate     = array('last_date'  //查詢的最後日期
-                                 ,'first_date' //查詢的開始日期
-                                 ,'preday'     //查詢的最後日期往前多少天
-                                 ,'date_range' //陣列裡面存日期,只查詢陣列列出的日期
-                            );
+    private $aCom         = [];    //外資的代號跟中文名稱陣列
+    private $aComInfo     = [];    //觀察中的外資的買賣量資料
+    private $aComLong     = [];    //長線的外資代號
+    private $aMorDays     = [1];   //抓外資買賣量資料的天數,預設1天
+    private $aComHold     = [];    //外資可能的持股量
+    private $aDayMost     = [];    //記錄當天有大量買進的股票
+    private $aComShort    = [];    //短線的外資代號
+    private $aTopStock    = [];    //外資跟投信是否有多天買入股票
+    private $aLowStock    = [];    //外資跟投信是否有多天賣出股票
+    private $aAllStock    = [];    //所有股票的代號以及資訊
+    private $aArrWkdate   = [];    //實際有資料的日期的陣列
+    private $aKeyinData   = [];    //持有的股票陣列
+    private $aTrackData   = [];    //追蹤中的股票陣列
+    private $aOutPerData  = [];    //所有外資的持股比例
+    private $aOutTouStock = [];    //外資跟投信當天有大量買入或賣出的股票
+    private $aSchDate     = [
+        'last_date',  //查詢的最後日期
+        'first_date', //查詢的開始日期
+        'preday',     //查詢的最後日期往前多少天
+        'date_range'  //陣列裡面存日期,只查詢陣列列出的日期
+    ];
     //所有的股票資訊計算後的代號
-    private $aAllShowType = array('keyin_data' //持有的股票
-            ,'track_data' //追蹤中的股票
-            ,'day_most' //外資當天買進
-            ,'out_tou_stock_top' //投信跟外資大量買進
-            ,'out_tou_stock_low' //投信跟外資大量賣出
-            ,'top_stock_out' //外資多天大量買進
-            ,'top_stock_tou' //投信多天大量買進
-            ,'low_stock_out' //外資多天大量賣出
-            ,'low_stock_tou' //投信多天大量賣出
-                           );    
+    private $aAllShowType = [
+        'keyin_data', //持有的股票
+        'track_data', //追蹤中的股票
+        'day_most', //外資當天買進
+        'out_tou_stock_top', //投信跟外資大量買進
+        'out_tou_stock_low', //投信跟外資大量賣出
+        'top_stock_out', //外資多天大量買進
+        'top_stock_tou', //投信多天大量買進
+        'low_stock_out', //外資多天大量賣出
+        'low_stock_tou', //投信多天大量賣出
+    ];
     
     //所有買賣量的級距
-    private $aLvType = array(1  => '-20001~'
-                            ,2  => '-20000~-10001'
-                            ,3  => '-10000~-5001'
-                            ,4  => '-5000~-2001'
-                            ,5  => '-2000~-1001'
-                            ,6  => '-1000~-501'
-                            ,7  => '-500~-101'
-                            ,8  => '-100~-1'
-                            ,9  => '0~99'
-                            ,10 => '100~499'
-                            ,11 => '500~999'
-                            ,12 => '1000~1999'
-                            ,13 => '2000~4999'
-                            ,14 => '5000~9999'
-                            ,15 => '10000~19999'
-                            ,16 => '20000~'
-    );
+    private $aLvType = [
+        1  => '-20001~',
+        2  => '-20000~-10001',
+        3  => '-10000~-5001',
+        4  => '-5000~-2001',
+        5  => '-2000~-1001',
+        6  => '-1000~-501',
+        7  => '-500~-101',
+        8  => '-100~-1',
+        9  => '0~99',
+        10 => '100~499',
+        11 => '500~999',
+        12 => '1000~1999',
+        13 => '2000~4999',
+        14 => '5000~9999',
+        15 => '10000~19999',
+        16 => '20000~',
+    ];
     //存股股票
-    private $aSaveStock = array(
-         2886 => '兆豐金'
-        ,2892 => '第一金'
-        ,5880 => '合庫金'
-        ,2880 => '華南金'
-        ,2412 => '中華電'
-        ,2412 => '中華電'
-        ,3045 => '台灣大'
-        ,4904 => '遠傳　'
-    );
+    private $aSaveStock = [
+        2886 => '兆豐金',
+        2892 => '第一金',
+        5880 => '合庫金',
+        2880 => '華南金',
+        2412 => '中華電',
+        2412 => '中華電',
+        3045 => '台灣大',
+        4904 => '遠傳　',
+    ];
     //所有買賣量的級距
-    private $aBosType  = array('buy','sel','bms');
+    private $aBosType  = ['buy','sel','bms'];
     //已經運算過的日期
-    private $aSaveWkDate = array();
+    private $aSaveWkDate = [];
     //不顯示出來的股票代號,有抓不到外資持股量,也有金融業的股票
-    /* 1101B-台泥乙特
+    /* 
+     * 1101B-台泥乙特
      * 2801-彰銀
      * 2812-台中銀
      * 2834-臺企銀
@@ -115,9 +120,10 @@ class cGetStockInfo {
      * 5876-上海商銀
      * 5880-合庫金
      */
-    private $aNoShowSno = array('1101B','2801','2812','2834','2836','2838','2880','2881','2881A','2881B','2882','2882A','2882B','2883','2838A','2884','2885','2886','2887','2887E','2887F','2888','2889','2890','2891','2891B','2891C','2892','5876','5880');
+    private $aNoShowSno = ['1101B','2801','2812','2834','2836','2838','2880','2881','2881A','2881B','2882','2882A','2882B','2883','2838A','2884','2885','2886','2887','2887E','2887F','2888','2889','2890','2891','2891B','2891C','2892','5876','5880'];
     
-    public function __construct(){
+    public function __construct()
+    {
         $this->sRootPath = dirname(dirname(__FILE__)).'/';
         $this->sDataPath = $this->sRootPath.'./../data/';
         $this->aCom      = MorInfo::getMorInfo();
@@ -133,101 +139,135 @@ class cGetStockInfo {
     public function mSetPreDayPer($val){
         $this->nPreDayPer = $val;
     }
-    public function mGetPreDayPer(){
+
+    public function mGetPreDayPer()
+    {
         $chk_pre_day_per = $this->nPreDayPer;
-        if (''==$chk_pre_day_per || !is_numeric($chk_pre_day_per)){
+        if (''==$chk_pre_day_per || !is_numeric($chk_pre_day_per)) {
             $this->mSetPreDayPer(0.8);
         }
         return $this->nPreDayPer;
     }
-    public function mSetBuyPercent($val){
+
+    public function mSetBuyPercent($val) 
+    {
         $this->nBuyPercent = $val;
     }
-    public function mGetBuyPercent(){
+
+    public function mGetBuyPercent() 
+    {
         $chk_buy_percent = $this->nBuyPercent;
         if (''==$chk_buy_percent || !is_numeric($chk_buy_percent)){
             $this->mSetBuyPercent(0.15);
         }
         return $this->nBuyPercent;
     }
-    public function mSetSelPercent($val){
+
+    public function mSetSelPercent($val)
+    {
         $this->nSelPercent = $val;
     }
-    public function mGetSelPercent(){
+
+    public function mGetSelPercent()
+    {
         $chk_sel_percent = $this->nSelPercent;
         if (''==$chk_sel_percent || !is_numeric($chk_sel_percent)){
             $this->mSetSelPercent(0.03);
         }
         return $this->nSelPercent;
     }
+
     public function mSetMorDays($arr){
         $this->aMorDays = $arr;
     }
-    public function mGetMorDays(){
+
+    public function mGetMorDays()
+    {
         $chk_mor_days = $this->aMorDays;
         if (empty($chk_mor_days) || !is_array($chk_mor_days)){
             $this->mSetMorDays(array(1));
         }
         return $this->aMorDays;
     }
-    public function mSetScgDate($arr){
-        if (empty($arr) || !is_array($arr)) $arr = array();
-        $this->aSchDate = $arr;
+
+    public function mSetScgDate($arr)
+    {
+        $this->aSchDate = (empty($arr) || !is_array($arr)) ? [] : $arr;
     }
-    public function mGetSchDate(){
+
+    public function mGetSchDate()
+    {
         return $this->aSchDate;
     }
-    public function mGetCom(){
+    
+    public function mGetCom()
+    {
         return $this->aCom;
     }
-    public function mGetComLong(){
+    
+    public function mGetComLong()
+    {
         return $this->aComLong;
     }
-    public function mGetComShort(){
+
+    public function mGetComShort()
+    {
         return $this->aComShort;
     }
-    public function mGetFirstWkdate(){
+    public function mGetFirstWkdate()
+    {
         return $this->sFirstWkdate;
     }
-    public function mGetLastWkdate(){
+    public function mGetLastWkdate()
+    {
         return $this->sLastWkdate;
     }
-    public function mGetArrWkdate(){
+    
+    public function mGetArrWkdate()
+    {
         return $this->aArrWkdate;
     }
-    public function mGetOutStr(){
+
+    public function mGetOutStr()
+    {
         return $this->sOutStr;
     }
-    public function mGetTouStr(){
+
+    public function mGetTouStr()
+    {
         return $this->sTouStr;
     }
-    public function mSetKeyinData($arr){
+
+    public function mSetKeyinData($arr)
+    {
         $this->aKeyinData = $arr;
     }
-    public function mGetKeyinData(){
-        $chk_keyin_data = $this->aKeyinData;
-        if (!is_array($chk_keyin_data)){
-            $this->mSetKeyinData(array());
-        }
-        return $this->aKeyinData;
+    public function mGetKeyinData()
+    {
+        return (!is_array($this->aKeyinData)) ? [] : $this->aKeyinData;
     }
-    public function mSetTrackData($arr){
+    public function mSetTrackData($arr)
+    {
         $this->aTrackData = $arr;
     }
-    public function mGetTrackData(){
-        $chk_track_data = $this->aTrackData;
-        if (!is_array($chk_track_data)){
-            $this->mSetTrackData(array());
-        }
-        return $this->aTrackData;
+
+    public function mGetTrackData()
+    {
+        return (!is_array($chk_track_data)) ? [] : $this->aTrackData;
     }
-    public function mGetAllShowType(){
+
+    public function mGetAllShowType()
+    {
         return $this->aAllShowType;
     }
-    public function mGetLvType(){
+
+    public function mGetLvType()
+    {
         return $this->aLvType;
     }
-    public function mGetSaveStock(){
+
+    public function mGetSaveStock()
+    {
         return $this->aSaveStock;
     }
     
@@ -245,14 +285,14 @@ class cGetStockInfo {
      *               $rtn['last_wkdate']   最晚的工作天的日期
      */
     public function mGetStockInfo(){
-        $rtn        = array();
+        $rtn        = [];
         /**********************************************************
          * 處理三大法人資料
          **********************************************************/
-        $top_stock  = array();
-        $tou_stock  = array();
-        $arr_allday = array();
-        $all_stock  = array();
+        $top_stock  = [];
+        $tou_stock  = [];
+        $arr_allday = [];
+        $all_stock  = [];
         $arr_com    = $this->mGetCom();
         $arr_day    = $this->aMorDays;
         $com_long   = $this->mGetComLong();
@@ -396,7 +436,8 @@ class cGetStockInfo {
      *               $rtn['last_wkdate']  最晚有股票資料的日期
      *               $rtn['arr_wkdate']   最早與最晚之間所有有資料的日期(日期從早排到晚) 
      */
-    public function mCalStockDates($arr_date){
+    public function mCalStockDates($arr_date)
+    {
         $rtn        = array();
         $_cnt       = 1;
         $arr_wkdate = array();
@@ -962,17 +1003,19 @@ class cGetStockInfo {
      * @param  array  $sch_date 參閱$this->aSchDate
      * @param  string $arr_sno  要抓的股票代號,空則不限制
      *
-     * @return string $rtn[股票代號][日期]['out','tou','zen']['buy'] 三大法人當天的買入量
+     * @return array $rtn[股票代號][日期]['out','tou','zen']['buy'] 三大法人當天的買入量
      *                                                      ['sel'] 三大法人當天的賣出量
      *                                                      ['bms'] 三大法人當天的買入減賣出量
      */
-    public function mGetThreeBigBOS($sch_date,$arr_sno=array()){
-        $rtn  = array();
+    public function mGetThreeBigBOS($sch_date, $arr_sno=array()){
+        $rtn  = [];
         $_arr = $this->mCalStockDates($sch_date);
         $data_path  = $this->sDataPath;
         $arr_wkdate = $_arr['arr_wkdate'];
-        if (empty($arr_wkdate)) return $rtn;
-        
+        if (empty($arr_wkdate)) {
+            return $rtn;
+        }
+
         foreach ($arr_wkdate as $_date){
             $_file_path = $data_path."./stock/threebig_bos/txt_".$_date.".txt";
             if (!file_exists($_file_path)) continue;
@@ -1513,7 +1556,3 @@ class cGetStockInfo {
         return $rtn;
     }
 }
-
-
-
-?>

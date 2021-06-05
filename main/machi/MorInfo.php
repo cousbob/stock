@@ -4,7 +4,7 @@ class MorInfo
 {
 	public static function getMorInfo()
 	{
-		$arr_com = array();
+		$arr_com = [];
 		/* 設定外資資訊的地方
 		get_mor_info.php 與 stock.php會用到 
 		*/
@@ -34,12 +34,12 @@ class MorInfo
 	}
 	public static function getComLong()
 	{
-		return array('morganstanley','singapore','goldmansachs','maylin','germanreich','citigroup');
+		return ['morganstanley','singapore','goldmansachs','maylin','germanreich','citigroup'];
 	}
 
 	public static function getComShort()
 	{
-		return array('macquarie','nomura','creditsuisse','JPmorganchase');
+		return ['macquarie','nomura','creditsuisse','JPmorganchase'];
 	}
 
 }

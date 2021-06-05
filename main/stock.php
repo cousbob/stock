@@ -22,7 +22,9 @@ $get_stock     = new cGetStockInfo();
 $all_gain_type = $gain_stock->mGetAllGainType();
 $gain_type_lastdate = $gain_stock->mGetGainTypeLastdate();
 
-if (''==$_POST['f_key']) $_POST['f_key'] = '2';
+if (''==$_POST['f_key']) {
+    $_POST['f_key'] = '2';
+}
 
 if (''!=$_POST['f_key']){
     switch ($_POST['f_key']){
