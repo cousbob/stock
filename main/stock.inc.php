@@ -234,8 +234,8 @@ function strflz($num,$digit,$chr=0){
    @param  string $title 要顯示的提示訊息
    @return string $rtn   加上font標籤以及顏色的字串
  */
-function font_tag($str,$style='',$title=''){
-    return '<font title="'.$title.'" style="'.$style.'" >'.$str.'</font>';    
+function font_tag($str, $style='', $title=''){
+    return '<font title="'.$title.'" style="'.$style.'" >'.$str.'</font>';
 }
 
 /* Function: 格式化日期的sup標籤
@@ -297,15 +297,13 @@ function s_ary($arr,$str=''){
    @return string $rtn   大於0回傳紅色,小於0回傳綠色,等於0回傳黑色
  */
 function cal_num_color($num,$style='',$title=''){
-    $rtn_str = '';
     if ($num < 0){
-        $rtn_str = font_tag(abs($num),$style.'color:green;',$title);
+        return font_tag(abs($num),$style.'color:green;',$title);
     } else if ($num > 0){
-        $rtn_str = font_tag(abs($num),$style.'color:red;'  ,$title);
+        return font_tag(abs($num),$style.'color:red;'  ,$title);
     } else {
-        $rtn_str = font_tag(abs($num),$style.'color:black;',$title);
+        return font_tag(abs($num),$style.'color:black;',$title);
     }
-    return $rtn_str;    
 }
 
 /**
@@ -315,27 +313,15 @@ function cal_num_color($num,$style='',$title=''){
  * @return string $rtn 去除後的字串
  */
 function leave_tag($str,$tag){
-    $chk_tag = strtolower($tag);
-    $chk_str = $str;
-    $_arr    = array();
-    if (false!==strpos($chk_str,'</'.$chk_tag.'>')){
-        $_arr    = explode('</'.$chk_tag.'>', $chk_str);
-        $chk_str = $_arr[0];
+    $chk_str = explode('</'.((false !== strpos($str,'</'.strtolower($tag).'>')) ? strtolower($tag) : strtoupper($tag)).'>', $str);
+    
+    if (false !== strpos($chk_str[0],'>')){
+        $_arr = explode('>', $chk_str[0]);
+        return trim($_arr[count($_arr)-1]);
     } else {
-        $chk_tag = strtoupper($tag);
-        $_arr    = explode('</'.$chk_tag.'>', $chk_str);
-        $chk_str = $_arr[0];
+        return trim($chk_str[0]);
     }
-    
-    if (false!==strpos($chk_str,'>')){
-        $_arr = explode('>', $chk_str);
-        $chk_str = $_arr[count($_arr)-1];
-    }
-    
-    $rtn = trim($chk_str);
-    return $rtn;
 }
-
 
 /**
  * 取得券商資訊

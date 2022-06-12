@@ -5,14 +5,8 @@ require_once 'stock.inc.php';
 foreach($_GET  as $key=>$val){$$key=$val;}
 foreach($_POST as $key=>$val){$$key=$val;}
 
-//預設值
-$yy     = date('Y');
-$mm     = date('m');
-$dd     = date('d');
-$today  = $yy.$mm.$dd;
 $get_stock = new cGetStockInfo();
-$sch_date  = array();
-$com_cal_data = $get_stock->mGetComCalData($sch_date,100,array(1,2,3,4,5,6));
+$com_cal_data = $get_stock->mGetComCalData([],100,array(1,2,3,4,5,6));
 foreach ($com_cal_data['sno'] as $_sno=>$_data2){
     foreach ($_data2 as $_combo_days=>$_data){
         

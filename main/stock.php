@@ -64,46 +64,44 @@ if (''!=$_POST['f_key']){
 $sel_sta_days_per = floor($sel_sta_days*$sel_sta_percent);
 
 //持有的股票
-$_file_path = "./../data/stock/keyin_stock.txt";
-$keyin_data = array();
 if (!isset($keyin_str)){
-    $_handle   = fopen($_file_path, "r");
+    $_handle   = fopen("./../data/stock/keyin_stock.txt", "r");
     $keyin_str = fgets($_handle);
 } else {
-    $_handle = fopen($_file_path, "w");
+    $_handle = fopen("./../data/stock/keyin_stock.txt", "w");
     fwrite($_handle, $keyin_str);
 }   
-fclose($_handle);
 $keyin_data = explode(',',$keyin_str);
+fclose($_handle);
+
 //持續追蹤的股票
-$_file_path = "./../data/stock/track_stock.txt";
-$track_data = array();
 if (!isset($track_str)){
-    $_handle   = fopen($_file_path, "r");
+    $_handle   = fopen("./../data/stock/track_stock.txt", "r");
     $track_str = fgets($_handle);
 } else {
-    $_handle = fopen($_file_path, "w");
+    $_handle = fopen("./../data/stock/track_stock.txt", "w");
     fwrite($_handle, $track_str);
 }
 fclose($_handle);
 $track_data   = explode(',',$track_str);
 $arr_com      = $get_stock->mGetCom();
 $arr_com_long = $get_stock->mGetComLong();
-$_arr = array();
-$_arr['last_date'] = $sch_date;
-$_arr['preday']    = $sel_sta_days;
 //塞資料
-$get_stock->mSetScgDate($_arr);
+$get_stock->mSetScgDate([
+    'last_date' => $sch_date,
+    'preday'    => $sel_sta_days
+]);
 $get_stock->mSetPreDayPer($sel_sta_percent);
 $get_stock->mSetBuyPercent($sel_buy_percent);
 $get_stock->mSetSelPercent($sel_sel_percent);
 $get_stock->mSetMorDays($arr_day);
 $get_stock->mSetKeyinData($keyin_data);
 $get_stock->mSetTrackData($track_data);
-$arr_stock    = $get_stock->mGetStockInfo();  //計算出外資買賣量
-$first_wkdate = $get_stock->mGetFirstWkdate();//取得第一個工作日
-$last_wkdate  = $get_stock->mGetLastWkdate(); //取得最後一個工作日
-$arr_save_stock = $get_stock->mGetSaveStock();//取得要存股的股票
+$arr_stock      = $get_stock->mGetStockInfo();       //計算出外資買賣量
+$first_wkdate   = $get_stock->mGetFirstWkdate();     //取得第一個工作日
+$last_wkdate    = $get_stock->mGetLastWkdate();      //取得最後一個工作日
+$arr_save_stock = $get_stock->mGetSaveStock();       //取得要存股的股票
+$tw_index       = $get_stock->mGetTWIndex();         //取得當天台股指數的資料
 
 //下拉天數
 $sel_day_str  = '<select name="sel_sta_days" id="sel_sta_days">';
@@ -126,7 +124,6 @@ $search_btn   = '<input name="f_btn" type="button" value="查詢" '.$click.' />'
 $click        = ' onclick="document.forms[0].sch_date.value=\'\';document.forms[0].sel_sta_days.value=\'\';send_key(2);" ';
 $ori_btn      = '<input name="f_btn" type="button" value="初始值" '.$click.' />';
 //外資買賣量按鈕
-//$click        = ' onclick="window.open(\'./machi/get_mor_info.php?close=true&get_type=1\');"';
 $click             = 'onclick="send_key(3);"';
 $get_bos_btn       = '<input name="f_btn" type="button" value="抓'.$today.'股票資訊" '.$click.' />';
 $click             = 'onclick="javascript:(confirm(\'確定依區間抓取?\')?send_key(4):\'\')"';
@@ -150,7 +147,6 @@ $bos_begdate_inp = '<input type="text" id="bos_begdate" name="bos_begdate" value
 $bos_enddate_inp = '<input type="text" id="bos_enddate" name="bos_enddate" value="'.$bos_enddate.'" style="width:60px" />';
 
 //重新計算外資持股按鈕
-//$click        = ' onclick="window.open(\'./machi/get_hold_stock.php?close=true\');" ';
 $click        = 'onclick="send_key(5);"';
 $re_hold_btn  = '<input type="button" value="重新計算持股" '.$click.' ></input>';
 
@@ -292,6 +288,9 @@ $html .= '</tr>';
 $html .= '</table>';
 $html .= '起始日期:'.format_date($first_wkdate,2).'~結束日期:'.format_date($last_wkdate,2).',';
 $html .= $sel_sta_days.'天內有超過'.$sel_sta_days_per.'天買入'.$sel_buy_percent.'%以上,賣出超過'.$sel_sel_percent.'%以上';
+$html .= '<br />';
+$html .= '當日台股資訊=成交金額:'.number_format($tw_index[$last_wkdate]['ok_money'], 0, '.', ',');
+$html .= ',成交筆數:'.number_format($tw_index[$last_wkdate]['ok_count'], 0, '.', ',');
 $html .= '<br />';
 $all_show_type = $get_stock->mGetAllShowType();
 $arr_type      = array();

@@ -292,9 +292,16 @@ if (!empty($tick_datas)){
         $_hand_fee   = $_tdata['hand_fee'];
         $_type_str   = '';
         $_tit_str    = '';
+        $_u10_price  = round($_buy_price*1.1,2);
+        $_d10_price  = round($_buy_price*0.9,2);
         $_u7_price   = round($_buy_price*1.07,2);
         $_d7_price   = round($_buy_price*0.93,2);
-        $_buy_str    = $_buy_price.'<br />'.$_u7_price.'(+7)<br />'.$_d7_price.'(-7)';
+        $_u5_price   = round($_buy_price*1.05,2);
+        $_d5_price   = round($_buy_price*0.95,2);
+        $_u3_price   = round($_buy_price*1.03,2);
+        $_d3_price   = round($_buy_price*0.97,2);
+        $_buy_str    = $_u10_price.'(+10)<br />'.$_u7_price.'(+7)<br />'.$_u5_price.'(+5)<br />'.$_u3_price.'(+3)<br />'.$_buy_price.'<br />';
+        $_buy_str   .= $_d3_price.'(-3)<br />'.$_d5_price.'(-5)<br />'.$_d7_price.'(-7)<br />'.$_d10_price.'(-10)';
         foreach ($arr_type as $_tidx=>$_str){
             if (in_array($_tidx,$_type)){
                 $_type_str  = '●';
